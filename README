@@ -1,0 +1,101 @@
+############################################################################
+#####                                                                  #####
+##### bbbbbbbb                                    bbbbbbbb             #####
+##### b::::::b            lllllll                 b::::::b             #####
+##### b::::::b            l:::::l                 b::::::b             #####
+##### b::::::b            l:::::l                 b::::::b             #####
+#####  b:::::b            l:::::l                  b:::::b             #####
+#####  b:::::bbbbbbbbb     l::::l    ooooooooooo   b:::::bbbbbbbbb     #####
+#####  b::::::::::::::bb   l::::l  oo:::::::::::oo b::::::::::::::bb   #####
+#####  b::::::::::::::::b  l::::l o:::::::::::::::ob::::::::::::::::b  #####
+#####  b:::::bbbbb:::::::b l::::l o:::::ooooo:::::ob:::::bbbbb:::::::b #####
+#####  b:::::b    b::::::b l::::l o::::o     o::::ob:::::b    b::::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::bbbbbb::::::bl::::::lo:::::ooooo:::::ob:::::bbbbbb::::::b #####
+#####  b::::::::::::::::b l::::::lo:::::::::::::::ob::::::::::::::::b  #####
+#####  b:::::::::::::::b  l::::::l oo:::::::::::oo b:::::::::::::::b   #####
+#####  bbbbbbbbbbbbbbbb   llllllll   ooooooooooo   bbbbbbbbbbbbbbbb    #####
+#####                                                                  #####
+############################################################################
+
+blob is a simple, free micro-blogging service.
+Join now to share notices about yourself with friends, family, and colleagues!
+
+###########
+# License #
+###########
+blob is a micro-blogging service where you can share notices
+about yourself with friends, family, and colleagues!
+
+Copyright (C) 2011  Avinash Joshi <avinashtjoshi@gmail.com>
+
+blob is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+blob is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+################
+# Installation #
+################
+
+There are two way of getting the source code.
+
+    1. Mercurial:
+        hg clone https://bitbucket.org/avinashjoshi/blob
+
+    2. Download files and extract:
+        http://bitbucket.org/avinashjoshi/blob
+
+The easiest way to install blob is to download and install 'XAMPP' if you do not already have a web server setup. 
+
+XAMPP is a very easy to install Apache Distribution for Linux, Solaris, Windows and Mac OS X.
+The package includes the Apache web server, MySQL, PHP, Perl, a FTP server and phpMyAdmin.
+
+XAMPP can be downloaded from:
+http://www.apachefriends.org/en/xampp.html
+
+Once you setup your database, and move the files to your document root directory, go to http://localhost/blob.
+Read the next step to setup the database.
+
+Admin User name = root
+Admin password = toor
+
+##################
+# Database Setup #
+##################
+
+To set up the database, go to http://localhost/blob/setup.php then click on the 'Create / Reset Database' button.
+This will create / reset the database for you with some data in.
+
+Note:
+    1. Make sure to delete/rename the setup.php file after installation! 
+    2. The /hackable/users folder must be writable (777)
+
+If you receive an error while trying to create your database, make sure your database credentials are correct within /config/config.inc.php
+
+The variables are set to the following by default: 
+
+$_BLOB[ 'db_database' ] = 'blob';
+$_BLOB[ 'db_user' ] = 'root';
+$_BLOB[ 'db_password' ] = 'toor';
+
+###########
+# Contact #
+###########
+# Contact: mail@avinashjoshi.co.in
+# More Info: http://avinashjoshi.co.in
+# Demo: http://avinashjoshi.co.in/blob
+# Download: http://bitbucket.org/avinashjoshi/blob
+# Mercurial Repo: `hg clone https://avinashjoshi@bitbucket.org/avinashjoshi/blob`
+
+# Created by: Avinash Joshi.
