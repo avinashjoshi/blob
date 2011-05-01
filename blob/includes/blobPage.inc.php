@@ -37,7 +37,7 @@ if(!isset($html)){
 
 // BLOB version
 function blobVersionGet() {
-    return '0.9a';
+    return '0.9';
 }
 
 // BLOB release date
@@ -129,6 +129,13 @@ function blobGetUserID( $user ) {
     return ($row[0]);
 }
 
+function blobGetUserFromId( $user_id ) {
+    $query  = "SELECT user FROM users where user_id = '$user_id'";
+    $result = mysql_query($query);
+    $row = mysql_fetch_row($result);
+    return ($row[0]);
+}
+
 function blobExistUser( $user ){
     $qry = "SELECT * FROM `users` WHERE user='$user';";
     $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
@@ -171,7 +178,6 @@ function getSecKey( $user=null ) {
     } else {
         return ( null );
     }
-
 }
 
 function blobCanFollowHTML( $toFollowUser ) {
@@ -285,6 +291,33 @@ function blobDeleteStatus ( $status_id ) {
     } else {
         return ( "This Status Does not exist!" );
     }
+}
+
+function blobShowFollowUserStatus( $user ) {
+    $user_id = blobGetUserID( $user );
+    // Get follow list
+	$qry = "SELECT follow FROM `users` WHERE user='$user';";
+    $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
+    $row = mysql_fetch_row($result);
+    $query  = "SELECT status, date_set, status_id, user_id FROM status where user_id IN ($row[0]) ORDER BY date_set DESC";
+    $result = mysql_query($query);
+    $status = '';
+    if ( $result && mysql_num_rows( $result ) > 0 ) {
+        while($row = mysql_fetch_row($result)){
+            $statusMsg = $row[0];
+            $time   = date("g:i a F j, Y ", strtotime($row[1]));
+            $statusId = $row[2];
+            $username = blobGetUserFromId($row[3]);
+            $deleteLink = BLOB_WEB_PAGE_TO_ROOT . "index.php?delete={$statusId}";
+            $delete = "<div style=\"float: right;\"><a href=\"{$deleteLink}\" style=\"text-decoration: none;\">X</a></div>";
+            $deleteHTML = blobCurrentUser() == $user ? ($user == $username ? "{$delete}" : "" ) : "";
+            $status .= "<div id=\"comments_main\"><div id=\"comments\">{$deleteHTML}<pre width=\"77\"><b>{$username}</b> {$statusMsg}</pre> <br />" . "</div> <span style=\"float: right; font-weight: bold; font-style: italic; font-size: 10px;\">@ {$time} IST</span></div> <br />";
+        }
+    } else {
+        $thisUser = blobCurrentUser() == $user ? "you have" : "this user has";
+        $status = "<div id=\"comments_main\"><div id=\"comments\"><pre width=\"77\">Oops! \nLooks like {$thisUser} not yet updated any status! :(</pre> </div></div>";
+    }
+    return $status;
 }
 
 function blobShowUserStatus( $user ) {

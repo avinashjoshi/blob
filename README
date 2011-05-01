@@ -95,7 +95,7 @@ $_BLOB[ 'db_password' ] = 'toor';
 # Contact: mail@avinashjoshi.co.in
 # More Info: http://avinashjoshi.co.in
 # Demo: http://avinashjoshi.co.in/blob
-# Download: http://bitbucket.org/avinashjoshi/blob
+# Download: https://bitbucket.org/avinashjoshi/blob/downloads
 # Mercurial Repo: `hg clone https://avinashjoshi@bitbucket.org/avinashjoshi/blob`
 
 # Created by: Avinash Joshi.

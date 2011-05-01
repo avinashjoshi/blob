@@ -57,7 +57,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	<ul>
 		<li>Web site: ".blobExternalLinkUrlGet( 'http://avinashjoshi.co.in/' )."</li>
-		<li>Application site: ".blobExternalLinkUrlGet( 'http://bitbucket.org/avinashjoshi/blob/' )."</li>
+		<li>Download site: ".blobExternalLinkUrlGet( 'http://bitbucket.org/avinashjoshi/blob/downloads' )."</li>
+		<li>Mercurial Repo: <pre>hg clone https://avinashjoshi@bitbucket.org/avinashjoshi/blob</pre></li>
 	</ul>
 </p>
 

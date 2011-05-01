@@ -72,14 +72,14 @@ $page[ 'body' ] .= "
 						<td><textarea style=\"padding: 5px;\" name=\"statusMsg\" cols=\"60\" rows=\"3\" maxlength=\"140\"></textarea></td>
 					</tr>
 					<tr>
-						<td><input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Update Status\" > ( Max 140 characters )</td>
+						<td><input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Blob It!\" > ( Max 140 characters )</td>
 					</tr>
 				</table>
 			</form>
 		</div>
 		<div class=\"clear\"></div>
-		<pre>Your previous status updates:</pre>
-		".blobShowUserStatus($user)."
+		<pre><b>All blob's (friends + me)</b> | <a href=\"".BLOB_WEB_PAGE_TO_ROOT."profile/view.php?user=$user\" style=\"text-decoration: none;\">My blob's</a></pre>
+		".blobShowFollowUserStatus($user)."
 		<br />
 	</div>";
 

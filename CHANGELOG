@@ -1,0 +1,52 @@
+############################################################################
+#####                                                                  #####
+##### bbbbbbbb                                    bbbbbbbb             #####
+##### b::::::b            lllllll                 b::::::b             #####
+##### b::::::b            l:::::l                 b::::::b             #####
+##### b::::::b            l:::::l                 b::::::b             #####
+#####  b:::::b            l:::::l                  b:::::b             #####
+#####  b:::::bbbbbbbbb     l::::l    ooooooooooo   b:::::bbbbbbbbb     #####
+#####  b::::::::::::::bb   l::::l  oo:::::::::::oo b::::::::::::::bb   #####
+#####  b::::::::::::::::b  l::::l o:::::::::::::::ob::::::::::::::::b  #####
+#####  b:::::bbbbb:::::::b l::::l o:::::ooooo:::::ob:::::bbbbb:::::::b #####
+#####  b:::::b    b::::::b l::::l o::::o     o::::ob:::::b    b::::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::b     b:::::b l::::l o::::o     o::::ob:::::b     b:::::b #####
+#####  b:::::bbbbbb::::::bl::::::lo:::::ooooo:::::ob:::::bbbbbb::::::b #####
+#####  b::::::::::::::::b l::::::lo:::::::::::::::ob::::::::::::::::b  #####
+#####  b:::::::::::::::b  l::::::l oo:::::::::::oo b:::::::::::::::b   #####
+#####  bbbbbbbbbbbbbbbb   llllllll   ooooooooooo   bbbbbbbbbbbbbbbb    #####
+#####                                                                  #####
+############################################################################
+
+
+####################
+# Change Log v0.9b #
+####################
+
+Changed "Update status" to "Blob it!"
+The index page now shows the blobs from all the users you follow
+Added this CHANGELOG file
+
+#######################
+# First release v0.9a #
+#######################
+
+Added admin page feature
+Added edit profile
+Added view profile
+Added login.php
+Added blob (status) feature
+Added join.php
+
+###########
+# Contact #
+###########
+# Contact: mail@avinashjoshi.co.in
+# More Info: http://avinashjoshi.co.in
+# Demo: http://avinashjoshi.co.in/blob
+# Download: https://bitbucket.org/avinashjoshi/blob/downloads
+# Mercurial Repo: `hg clone https://avinashjoshi@bitbucket.org/avinashjoshi/blob`
+
+# Created by: Avinash Joshi.
