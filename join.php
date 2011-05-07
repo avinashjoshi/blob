@@ -82,7 +82,19 @@ if( isset( $_POST[ 'Join' ] ) ) {
     $profUrl = $user . '_' . basename( $_FILES['file']['name']);
     $target_path = 'hackable/users/' . $profUrl;
 
-    if ((($_FILES["file"]["type"] == "image/gif")
+    $file_info = getimagesize($_FILES['file']['tmp_name']);
+    if(empty($file_info)) {
+        blobMessagePush("The uploaded file doesn't seem to be an image.");
+        if ( $fn != "")
+            blobRegMessagePush("fn", $fn);
+        if ( $ln != "")
+            blobRegMessagePush("ln", $ln);
+        if ( $user != "")
+            blobRegMessagePush("user", $user);
+        if ( $key != "")
+            blobRegMessagePush("key", $key);
+        blobRedirect( 'join.php' );
+    } else if ((($_FILES["file"]["type"] == "image/gif")
         || ($_FILES["file"]["type"] == "image/jpeg")
         || ($_FILES["file"]["type"] == "image/png")
         || ($_FILES["file"]["type"] == "image/pjpeg"))

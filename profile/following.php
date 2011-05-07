@@ -31,22 +31,22 @@ blobDatabaseConnect();
 $user = blobCurrentUser();
 $user_id = blobGetUserID( $user );
 
-if(isset($_GET['user']))
+if(isset($_GET['unfollow']))
 {
-    $page[ 'title' ] .= $page[ 'title_separator' ].'Follow User';
-    $page[ 'page_id' ] = 'followuser';
-    $user = stripslashes($_GET['user']);
+    $page[ 'title' ] .= $page[ 'title_separator' ].'Unfollow User';
+    $page[ 'page_id' ] = 'unfollowuser';
+    $user = stripslashes($_GET['unfollow']);
     $user = mysql_real_escape_string($user);
     // Check if the user exists
     if ( !blobExistUser($user) ) {
         blobMessagePush( "'".$user."' does not exist!" );
-        blobRedirect( 'follow.php' );
+        blobRedirect( 'following.php' );
     }
 
     $fullName = blobGetUserFullName($user);
     $avatar = getAvatar($user);
 
-    $followHTML = blobFollowUser($user);
+    $unFollowHTML = blobUnFollowUser($user);
     $profilepage = BLOB_WEB_PAGE_TO_ROOT . 'profile/view.php?user=' . $user;
     $page[ 'body' ] .= "
         <div class=\"body_padded\">
@@ -59,7 +59,7 @@ if(isset($_GET['user']))
         <div style=\"margin-left: 120px;\">
         ".blobInternalLinkUrlGet($profilepage,$fullName)."
         <br /><br />
-    {$followHTML}
+    {$unFollowHTML}
     <br /><br />
     </div>
     </div>
@@ -71,13 +71,13 @@ if(isset($_GET['user']))
     </div>
     ";
 } else {
-    $page[ 'title' ] .= $page[ 'title_separator' ].'User List';
-    $page[ 'page_id' ] = 'othersprofile';
+    $page[ 'title' ] .= $page[ 'title_separator' ].'You are following...';
+    $page[ 'page_id' ] = 'following';
     $page[ 'body' ] .= "
         <div class=\"body_padded\">
-        <h2>User List</h2>
+        <h2>You are following</h2>
 
-        ".blobUserList()."
+        ".blobFollowUserList()."
         <br /> <br />
 
         </div>

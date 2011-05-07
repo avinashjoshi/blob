@@ -21,6 +21,16 @@
 ############################################################################
 
 
+###################
+# Change Log v0.9 #
+###################
+While deleting a profile, the profile image is also deleted
+During registration or updating profile, 
+    the uploaded file's header is checked if its an image file
+Unfollowing user implemented - Added profile/following.php
+Users can view whom they are following
+Now, admins can view user status without following
+
 ####################
 # Change Log v0.9b #
 ####################

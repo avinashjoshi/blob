@@ -181,6 +181,7 @@ function getSecKey( $user=null ) {
 }
 
 function blobCanFollowHTML( $toFollowUser ) {
+    global $page;
     $follower = blobCurrentUser();
     if( blobCanFollow($toFollowUser) ) {
         $followUrl = BLOB_WEB_PAGE_TO_ROOT . "profile/follow.php?user=" . $toFollowUser;
@@ -188,7 +189,25 @@ function blobCanFollowHTML( $toFollowUser ) {
     } else if ( $toFollowUser == $follower ) {
         return ( "<span class=\"button-plain\" style=\"color: rgb(153, 204, 51);\">That's me!</span>" );
     } else {
-        return ( "<span class=\"button-plain\">Following!</span>" );
+        $unFollowUrl = BLOB_WEB_PAGE_TO_ROOT . "profile/following.php?unfollow=" . $toFollowUser;
+        if ($page[ 'page_id' ] == "othersprofile" ) {
+            return ( "<span class=\"button-plain\" style=\"color: rgb(153, 204, 51);\">Following!</span>" );
+        } else {
+            return ( "<span class=\"button-plain\" style=\"color: rgb(153, 204, 51);\">Following!</span>&nbsp;&nbsp;&nbsp;<input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Un Follow\" onclick=\"window.location='{$unFollowUrl}'\">" );
+        }
+    }
+}
+
+function blobUnFollowHTML( $toFollowUser ) {
+    $follower = blobCurrentUser();
+    if ( $toFollowUser == $follower ) {
+        return ( "<span class=\"button-plain\" style=\"color: rgb(153, 204, 51);\">That's me!</span>" );
+    } else if( blobIsFollowing($toFollowUser) ) {
+        $unFollowUrl = BLOB_WEB_PAGE_TO_ROOT . "profile/following.php?unfollow=" . $toFollowUser;
+        return ("<input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Un Follow\" onclick=\"window.location='{$unFollowUrl}'\">");
+    } else {
+        $followUrl = BLOB_WEB_PAGE_TO_ROOT . "profile/follow.php?user=" . $toFollowUser;
+        return ( "<span class=\"button-plain\" style=\"color: rgb(153, 204, 51);\">That's me!</span><input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Un Follow\" onclick=\"window.location='{$followUrl}'\">" );
     }
 }
 
@@ -204,6 +223,20 @@ function blobCanFollow( $toFollowUser ) {
     } else {
         return ( true );
 
+    }
+}
+
+function blobIsFollowing( $toFollowUser ) {
+    $toFollow = blobGetUserID($toFollowUser);
+    $follower = blobCurrentUser();
+    $qry = "SELECT follow FROM `users` WHERE user='$follower';";
+    $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
+    $row = mysql_fetch_row($result);
+    $follow = explode(",", $row[0]);
+    if( in_array($toFollow,$follow) ) {
+        return ( true );
+    } else {
+        return ( false );
     }
 }
 
@@ -225,6 +258,25 @@ function blobFollowUser( $toFollowUser ) {
     }
 }
 
+function blobUnFollowUser( $toUnFollow ) {
+    $toUnFollowID = blobGetUserID($toUnFollow);
+    $follower = blobCurrentUser();
+    if ( $toUnFollow == $follower ) {
+        return ( "You cannot unfollow yourself!");
+    } else if ( blobIsFollowing($toUnFollow) ) {
+        $qry = "SELECT follow FROM `users` WHERE user='$follower';";
+        $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
+        $row = mysql_fetch_assoc($result);
+        $toReplace = "," . $toUnFollowID;
+        $follow = str_replace($toReplace, "", $row["follow"]);
+        $qry = "UPDATE `users` SET follow='$follow' WHERE user='$follower';";
+        $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
+        return ( "You are not following '{$toUnFollow}' any more!" );
+    } else {
+        $follow = blobCanFollowHTML($toUnFollow);
+        return ( "You are not following this user!" );
+    }
+}
 
 function blobRedirect( $pLocation ) {
     session_commit();
@@ -256,6 +308,42 @@ function blobUserList(){
     </div>
     </div>";
     }
+    return $userList;
+}
+
+function blobFollowUserList(){
+    $query  = "SELECT first_name,last_name,user,avatar comment FROM users";
+    $result = mysql_query($query);
+    $userList = '';
+    $count = 0;
+    while($row = mysql_fetch_row($result)){
+        if ( !blobIsFollowing($row[2]) || $row[2] == blobCurrentUser()) {
+        } else {
+            $count++;
+            $fullName    = $row[0] . ' ' . $row[1];
+            $profilepage = BLOB_WEB_PAGE_TO_ROOT . 'profile/view.php?user=' . $row[2];
+            $profileUrl = blobInternalLinkUrlGet($profilepage,$fullName);
+            $avatar = getAvatar($row[2]);
+            $avatarImage = "<img src=\"{$avatar}\" width=\"100\" />";
+            $followHTML = blobUnFollowHTML($row[2]);
+            $userList .= "
+                <div class=\"user-list\">
+                <div style=\"float: left; padding-right: 10px; border-right: 2px solid #C0C0C0; height: 100px;\">
+        {$avatarImage}
+        </div>
+        <div style=\"margin-left: 120px;\">
+        {$profileUrl}
+        <br /><br />
+        {$followHTML}
+        </div>
+        </div>";
+        }
+    }
+    if ($count == 0)
+        $userList = "
+                <div class=\"vulnerable_code_area\">
+                <pre>You are not following any user</pre>
+                </div>";
     return $userList;
 }
 
@@ -296,7 +384,7 @@ function blobDeleteStatus ( $status_id ) {
 function blobShowFollowUserStatus( $user ) {
     $user_id = blobGetUserID( $user );
     // Get follow list
-	$qry = "SELECT follow FROM `users` WHERE user='$user';";
+    $qry = "SELECT follow FROM `users` WHERE user='$user';";
     $result = @mysql_query($qry) or die('<pre>' . mysql_error() . '</pre>' );
     $row = mysql_fetch_row($result);
     $query  = "SELECT status, date_set, status_id, user_id FROM status where user_id IN ($row[0]) ORDER BY date_set DESC";
@@ -426,6 +514,7 @@ function blobHtmlEcho( $pPage ) {
     $menuBlocks['profile'][] = array( 'id' => 'viewprofile', 'name' => 'View Profile', 'url' => 'profile/view.php' );
     $menuBlocks['profile'][] = array( 'id' => 'editprofile', 'name' => 'Edit Profile', 'url' => 'profile/edit.php' );
     $menuBlocks['profile'][] = array( 'id' => 'othersprofile', 'name' => 'View Users', 'url' => 'profile/follow.php' );
+    $menuBlocks['profile'][] = array( 'id' => 'following', 'name' => 'Following', 'url' => 'profile/following.php' );
 
     if ( blobIsAdmin()) {
         $menuBlocks['admin'] = array();

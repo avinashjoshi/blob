@@ -34,78 +34,79 @@ $user = blobCurrentUser();
 
 if(isset($_GET['user']) && $_GET['user'] != $user )
 {
+    $user = $_GET['user'];
+    $user = mysql_real_escape_string($user);
+    // Check if the user exists
+    if ( !blobExistUser($user) ) {
+        blobMessagePush( "'".$user."' does not exist!" );
+        blobRedirect( 'view.php' );
+    }
+    $fullName = blobGetUserFullName($user);
+    $avatar = getAvatar($user);
+    $showStatusHTML = "";
+    $followHTML = blobCanFollowHTML($user);
 
-$user = $_GET['user'];
-//$user = mysql_real_escape_string($user);
-// Check if the user exists
-if ( !blobExistUser($user) ) {
-	blobMessagePush( "'".$user."' does not exist!" );
-	blobRedirect( 'view.php' );
-}
-$fullName = blobGetUserFullName($user);
-$avatar = getAvatar($user);
+    if (!blobCanFollow($user) || blobIsAdmin()) {
+        if (blobIsAdmin())
+            $showStatusHTML = "<div id=\"comments_main\"><div id=\"comments\"><pre width=\"77\"><b>Viewing user in Admin mode!</b></pre> </div></div>";
+        $showStatusHTML .= blobShowUserStatus($user);
+    } else {
+        $showStatusHTML = "<div id=\"comments_main\"><div id=\"comments\"><pre width=\"77\">You will be able to see his updates only if you follow the user!</pre> </div></div>";
+    }
 
-$followHTML = blobCanFollowHTML($user);
+    $page[ 'body' ] .= "
+        <div class=\"body_padded\">
+        <h2>User Profile: {$user}</h2>
 
+        <div class=\"vulnerable_code_area\">
+        <div style=\"float: left; padding-right: 10px; border-right: 2px solid #C0C0C0;\">
+        <img src=\"{$avatar}\" width=\"100\" />
+        </div>
+        <div style=\"margin-left: 120px;\">
+        {$fullName}
+        <br /><br />
+        {$followHTML}
+        </div>
+        </div>
 
-if (blobCanFollow($user))
-	$showStatusHTML = "<div id=\"comments_main\"><div id=\"comments\"><pre width=\"77\">You will be able to see his updates only if you follow the user!</pre> </div></div>";
-else
-	$showStatusHTML = blobShowUserStatus($user);
+        <div class=\"clear\"></div>
+        <pre>User's status updates:</pre>
+        {$showStatusHTML}
+        <br /><br /><br />
 
-$page[ 'body' ] .= "
-<div class=\"body_padded\">
-	<h2>User Profile: {$user}</h2>
-
-	<div class=\"vulnerable_code_area\">
-		<div style=\"float: left; padding-right: 10px; border-right: 2px solid #C0C0C0;\">
-			<img src=\"{$avatar}\" width=\"100\" />
-		</div>
-		<div style=\"margin-left: 120px;\">
-			{$fullName}
-			<br /><br />
-			{$followHTML}
-		</div>
-	</div>
-
-	<div class=\"clear\"></div>
-	<pre>User's status updates:</pre>
-	{$showStatusHTML}
-	<br /><br /><br />
-
-</div>
-";
+        </div>
+        ";
 } else {
 
-$user_id = blobGetUserID( $user );
-$fullName = blobGetUserFullName($user);
-$avatar = getAvatar($user);
-$showStatusHTML = blobShowUserStatus($user);
-$profileUrl = BLOB_WEB_PAGE_TO_ROOT;
-$user = $user . " (that's me!)";
+    $user_id = blobGetUserID( $user );
+    $fullName = blobGetUserFullName($user);
+    $avatar = getAvatar($user);
+    $showStatusHTML = blobShowUserStatus($user);
+    $profileUrl = BLOB_WEB_PAGE_TO_ROOT;
+    $user = $user . " (that's me!)";
 
-$page[ 'body' ] .= "
-<div class=\"body_padded\">
-	<h2>User Profile: {$user}</h2>
+    $page[ 'body' ] .= "
+        <div class=\"body_padded\">
+        <h2>User Profile: {$user}</h2>
 
-	<div class=\"vulnerable_code_area\">
-		<div style=\"float: left; padding-right: 10px; border-right: 2px solid #C0C0C0;\">
-			<img src=\"{$avatar}\" width=\"100\" />
-		</div>
-		<div style=\"margin-left: 120px;\">
-			{$fullName}
-			<br /><br />
-			<input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Update your status\" onclick=\"window.location='{$profileUrl}'\">
-		</div>
-	</div>
+        <div class=\"vulnerable_code_area\">
+        <div style=\"float: left; padding-right: 10px; border-right: 2px solid #C0C0C0;\">
+        <img src=\"{$avatar}\" width=\"100\" />
+        </div>
+        <div style=\"margin-left: 120px;\">
+        {$fullName}
+        <br /><br />
+        <input class=\"button\" name=\"btnUpdate\" type=\"submit\" value=\"Update your status\" onclick=\"window.location='{$profileUrl}'\">
+        </div>
+        </div>
 
-	<div class=\"clear\"></div>
-	<pre>Your previous status updates:</pre>
-	{$showStatusHTML}
-	<br /><br /><br />
+        <div class=\"clear\"></div>
+        <pre>Your previous status updates:</pre>
+        {$showStatusHTML}
+        <br /><br /><br />
 
-</div>
-";
+        </div>
+        ";
 }
 
 blobHtmlEcho( $page );
